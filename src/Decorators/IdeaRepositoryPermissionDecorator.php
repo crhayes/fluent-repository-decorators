@@ -1,5 +1,9 @@
 <?php namespace App\Decorators;
 
+use User;
+use Model;
+use Closure;
+use App\Exceptions\AuthorizationException;
 use App\Contracts\RepositoryInterface;
 
 class IdeaRepositoryPermissionDecorator implements RepositoryInterface {
@@ -12,15 +16,15 @@ class IdeaRepositoryPermissionDecorator implements RepositoryInterface {
 		$this->user = $user;
 	}
 
-	public function get($columns) {
+	public function get(array $columns) {
 		return $this->repository->get($columns);
 	}
 
-	public function find($id, $columns) {
+	public function find($id, array $columns) {
 		return $this->repository->find($id, $columns);
 	}
 
-	public function paginate($perPage, $page, $columns) {
+	public function paginate($perPage, $page, array $columns) {
 		return $this->repository->paginate($perPage, $page, $columns);
 	}
 
