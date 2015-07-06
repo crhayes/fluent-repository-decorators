@@ -13,25 +13,25 @@ class IdeaRepositoryApiDecorator implements RepositoryInterface {
 		$this->filters = $filters;
 	}
 
-	public function get($columns) {
+	public function get(array $columns) {
 		$query = $this->ideaRepository->newQuery();
 
-		if ($ids = array_get($this->filters, 'ids')) {
-			$query->filterByIds($ids);
+		if (array_key_exists('ids', $this->filters)) {
+			$query->filterByIds($this->filters['ids']);
 		}
 
-		if ($user = array_get($this->filters, 'user')) {
-			$query->filterByUser($user);
+		if (array_key_exists('user', $this->filters)) {
+			$query->filterByUser($this->filters['user']);
 		}
 
 		return $query->get($columns);
 	}
 
-	public function find($id, $columns) {
+	public function find($id, array $columns) {
 		//
 	}
 
-	public function paginate($perPage, $page, $columns) {
+	public function paginate($perPage, $page, array $columns) {
 		//
 	}
 
