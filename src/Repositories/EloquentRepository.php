@@ -1,16 +1,18 @@
 <?php namespace App\Repositories;
 
 use Closure;
+use App\Paginator;
 use App\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class EloquentRepository implements RepositoryInterface {
 
 	protected $model;
+	protected $paginator;
 
-	public function __construct(Model $model) {
+	public function __construct(Model $model, Paginator $paginator) {
 		$this->model = $model;
+		$this->paginator = $paginator;
 	}
 
 	public function get($columns = ['*']) {
@@ -24,7 +26,7 @@ abstract class EloquentRepository implements RepositoryInterface {
 	public function paginate($perPage = 10, $page = 1, $columns = ['*']) {
 		$query = $this->model->take($perPage)->offset($perPage * ($page - 1));
 
-        return new LengthAwarePaginator($query->get(), $query->count(), $perPage, $page);
+        return $this->paginator->make($query->get($columns), $query->count(), $perPage, $page);
 	}
 
 	public function chunk($perChunk, Closure $callback) {
