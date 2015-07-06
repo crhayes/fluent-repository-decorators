@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use App\Contracts\IdeaRepositoryInterface;
+
 class IdeaController {
 
 	/**
@@ -28,9 +30,26 @@ class IdeaController {
 		// Fetch filter query params from the API
 		$filters = Input::only(['ids', 'user']);
 
+		// $ideaRepositoryApiDecorator = new IdeaRepositoryApiDecorator(
+		// 	$this->ideaRepository,
+		// 	$filters
+		// );
+		// $ideaRepositoryValidationDecorator = new IdeaRepositoryValidationDecorator(
+		// 	$ideaRepositoryApiDecorator,
+		// 	new IdeaValidator
+		// );
+		// $ideaRepository = new IdeaRepositoryPermissionDecorator(
+		// 	$ideaRepositoryValidationDecorator,
+		// 	$currentUser
+		// );
+
 		// Decorate the Idea Repository with API specific logic
-		$ideaRepository = new IdeaRepositoryPermissionDecorator(
-			new IdeaRepositoryApiDecorator($this->ideaRepository, $filters),
+		$ideaRepository =
+		new IdeaRepositoryPermissionDecorator(
+			new IdeaRepositoryValidationDecorator(
+				new IdeaRepositoryApiDecorator($this->ideaRepository, $filters),
+				new IdeaValidator
+			),
 			$currentUser
 		);
 
