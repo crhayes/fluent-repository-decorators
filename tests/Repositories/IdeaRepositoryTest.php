@@ -24,11 +24,11 @@ class IdeaRepositoryTest extends PHPUnit_Framework_TestCase {
 			->shouldReceive('byIds')->once()->with($ids)->andReturn($this->mockIdea)
 			->shouldReceive('get')->once();
 
-		$this->ideaRepository->filterByIds([1])->get();
+		$this->ideaRepository->filterByIds($ids)->get();
 	}
 
 	public function testCanFilterByUser() {
-		$userId = [2];
+		$userId = 2;
 
 		$this->mockIdea
 			->shouldReceive('byUser')->once()->with($userId)->andReturn($this->mockIdea)
