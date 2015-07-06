@@ -22,10 +22,11 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testCanGetWithDefaults() {
+		$defaultColumns = ['*'];
 		$mockReturn = ['data'];
 
 		$this->mockModel
-			->shouldReceive('get')->once()->with(['*'])->andReturn($mockReturn);
+			->shouldReceive('get')->once()->with($defaultColumns)->andReturn($mockReturn);
 
 		$result = $this->modelRepository->get();
 
@@ -33,23 +34,24 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testCanGetWithSpecificColumns() {
-		$mockColumns = ['idea', 'title'];
+		$columns = ['idea', 'title'];
 		$mockReturn = ['data'];
 
 		$this->mockModel
-			->shouldReceive('get')->once()->with($mockColumns)->andReturn($mockReturn);
+			->shouldReceive('get')->once()->with($columns)->andReturn($mockReturn);
 
-		$result = $this->modelRepository->get($mockColumns);
+		$result = $this->modelRepository->get($columns);
 
 		$this->assertSame($result, $mockReturn);
 	}
 
 	public function testCanFindWithDefaults() {
 		$id = 1;
+		$defaultColumns = ['*'];
 		$mockReturn = ['data'];
 
 		$this->mockModel
-			->shouldReceive('find')->once()->with($id, ['*'])->andReturn($mockReturn);
+			->shouldReceive('find')->once()->with($id, $defaultColumns)->andReturn($mockReturn);
 
 		$result = $this->modelRepository->find($id);
 
@@ -70,16 +72,22 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testCanPaginateWithDefaults() {
+		$perPage = 10;
+		$page = 1;
+		$offset = ($page - 1) * $perPage;
+		$count = 1;
+		$defaultColumns = ['*'];
+		$interimReturn = 'result';
 		$mockReturn = ['data'];
 
 		$this->mockModel
-			->shouldReceive('take')->once()->with(10)->andReturn($this->mockModel)
-			->shouldReceive('offset')->once()->with(0)->andReturn($this->mockModel)
-			->shouldReceive('get')->once()->with(['*'])->andReturn('result')
-			->shouldReceive('count')->once()->andReturn(1);
+			->shouldReceive('take')->once()->with($perPage)->andReturn($this->mockModel)
+			->shouldReceive('offset')->once()->with($offset)->andReturn($this->mockModel)
+			->shouldReceive('get')->once()->with($defaultColumns)->andReturn($interimReturn)
+			->shouldReceive('count')->once()->andReturn($count);
 
 		$this->mockPaginator
-			->shouldReceive('make')->once()->with('result', 1, 10, 1)->andReturn($mockReturn);
+			->shouldReceive('make')->once()->with($interimReturn, $count, $perPage, $page)->andReturn($mockReturn);
 
 		$result = $this->modelRepository->paginate();
 
@@ -87,19 +95,24 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testCanPaginateWithSpecificColumns() {
+		$perPage = 50;
+		$page = 2;
+		$offset = ($page - 1) * $perPage;
+		$count = 1;
 		$mockColumns = ['idea', 'title'];
+		$interimReturn = 'result';
 		$mockReturn = ['data'];
 
 		$this->mockModel
-			->shouldReceive('take')->once()->with(50)->andReturn($this->mockModel)
-			->shouldReceive('offset')->once()->with(50)->andReturn($this->mockModel)
-			->shouldReceive('get')->once()->with($mockColumns)->andReturn('result')
-			->shouldReceive('count')->once()->andReturn(1);
+			->shouldReceive('take')->once()->with($perPage)->andReturn($this->mockModel)
+			->shouldReceive('offset')->once()->with($offset)->andReturn($this->mockModel)
+			->shouldReceive('get')->once()->with($mockColumns)->andReturn($interimReturn)
+			->shouldReceive('count')->once()->andReturn($count);
 
 		$this->mockPaginator
-			->shouldReceive('make')->once()->with('result', 1, 50, 2)->andReturn($mockReturn);
+			->shouldReceive('make')->once()->with($interimReturn, $count, $perPage, $page)->andReturn($mockReturn);
 
-		$result = $this->modelRepository->paginate(50, 2, $mockColumns);
+		$result = $this->modelRepository->paginate($perPage, $page, $mockColumns);
 
 		$this->assertSame($result, $mockReturn);
 	}
