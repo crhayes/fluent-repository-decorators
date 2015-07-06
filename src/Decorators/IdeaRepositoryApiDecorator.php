@@ -8,7 +8,7 @@ class IdeaRepositoryApiDecorator implements RepositoryInterface {
 	protected $ideaRepository;
 	protected $filters;
 
-	public function __construct(IdeaRepositoryInterface $ideaRepository, $filters = []) {
+	public function __construct(IdeaRepositoryInterface $ideaRepository, array $filters = []) {
 		$this->ideaRepository = $ideaRepository;
 		$this->filters = $filters;
 	}
