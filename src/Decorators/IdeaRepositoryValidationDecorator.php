@@ -1,5 +1,9 @@
 <?php namespace App\Decorators;
 
+use Model;
+use Closure;
+use IdeaValidator;
+use App\Exceptions\ValidationException;
 use App\Contracts\RepositoryInterface;
 
 class IdeaRepositoryValidationDecorator implements RepositoryInterface {
@@ -12,15 +16,15 @@ class IdeaRepositoryValidationDecorator implements RepositoryInterface {
 		$this->validator = $validator;
 	}
 
-	public function get($columns) {
+	public function get(array $columns) {
 		return $this->repository->get($columns);
 	}
 
-	public function find($id, $columns) {
+	public function find($id, array $columns) {
 		return $this->repository->find($id, $columns);
 	}
 
-	public function paginate($perPage, $page, $columns) {
+	public function paginate($perPage, $page, array $columns) {
 		return $this->repository->paginate($perPage, $page, $columns);
 	}
 
