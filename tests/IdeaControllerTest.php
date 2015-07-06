@@ -2,8 +2,12 @@
 
 class IdeaControllerTest extends PHPUnit_Framework_TestCase {
 
-	public function test_sanity() {
-		$this->assertTrue(true);
+	public function setUp() {
+		$this->ideaController = new App\IdeaController;
+	}
+
+	public function testIdeaControllerCanBeInstantiated() {
+		$this->assertInstanceOf('App\IdeaController', $this->ideaController);
 	}
 
 }
