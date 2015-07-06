@@ -5,11 +5,11 @@ use Closure;
 
 interface RepositoryInterface {
 
-	public function get($columns);
+	public function get(array $columns);
 
-	public function find($id, $columns);
+	public function find($id, array $columns);
 
-	public function paginate($perPage, $page, $columns);
+	public function paginate($perPage, $page, array $columns);
 
 	public function chunk($perChunk, Closure $callback);
 

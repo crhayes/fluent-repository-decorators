@@ -15,15 +15,15 @@ abstract class EloquentRepository implements RepositoryInterface {
 		$this->paginator = $paginator;
 	}
 
-	public function get($columns = ['*']) {
+	public function get(array $columns = ['*']) {
 		return $this->model->get($columns);
 	}
 
-	public function find($id, $columns = ['*']) {
+	public function find($id, array $columns = ['*']) {
 		return $this->model->find($id, $columns);
 	}
 
-	public function paginate($perPage = 10, $page = 1, $columns = ['*']) {
+	public function paginate($perPage = 10, $page = 1, array $columns = ['*']) {
 		$query = $this->model->take($perPage)->offset($perPage * ($page - 1));
 
         return $this->paginator->make($query->get($columns), $query->count(), $perPage, $page);

@@ -54,7 +54,7 @@ class IdeaController {
 		);
 
 		// Call our get method as per usual
-		return $ideaRepository->get('*');
+		return $ideaRepository->get(['*']);
 	}
 
 	/**
